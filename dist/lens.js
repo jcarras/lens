@@ -3851,7 +3851,9 @@ LensImporter.Prototype = function() {
     //   </subj-group>
     // </article-categories>
 
-    state.config.enhanceCover(state, cover, article);
+    if(state.config) {
+      state.config.enhanceCover(state, cover, article);
+    }
 
     doc.create(cover);
     doc.show("content", cover.id, 0);
@@ -4201,17 +4203,19 @@ LensImporter.Prototype = function() {
 
   this.document = function(state, xmlDoc) {
     // Setup configuration objects
-    var publisherName = xmlDoc.querySelector("publisher-name").textContent;
-    if (publisherName === "Landes Bioscience") {
-      state.config = new LandesConfiguration();
-    } else if (publisherName === "eLife Sciences Publications, Ltd") {
-      state.config = new ElifeConfiguration();
-    } else if (publisherName === "Public Library of Science") {
-      state.config = new PLOSConfiguration();
-    } else if (publisherName === 'PeerJ Inc.') {
-      state.config = new PeerJConfiguration();
-    } else {
-      state.config = new DefaultConfiguration();
+    if(xmlDoc.querySelector("publisher-name")) {
+      var publisherName = xmlDoc.querySelector("publisher-name").textContent;
+      if (publisherName === "Landes Bioscience") {
+        state.config = new LandesConfiguration();
+      } else if (publisherName === "eLife Sciences Publications, Ltd") {
+        state.config = new ElifeConfiguration();
+      } else if (publisherName === "Public Library of Science") {
+        state.config = new PLOSConfiguration();
+      } else if (publisherName === 'PeerJ Inc.') {
+        state.config = new PeerJConfiguration();
+      } else {
+        state.config = new DefaultConfiguration();
+      }
     }
 
     var doc = state.doc;
@@ -4334,7 +4338,9 @@ LensImporter.Prototype = function() {
     }
 
     // Lets the configuration patch the figure node properties
-    state.config.enhanceFigure(state, figureNode, figure);
+    if(state.config){
+      state.config.enhanceFigure(state, figureNode, figure);
+    }
     doc.create(figureNode);
 
     return figureNode;
@@ -4398,7 +4404,9 @@ LensImporter.Prototype = function() {
     }
 
     // Let config enhance the node
-    state.config.enhanceSupplement(state, supplementNode, supplement);
+    if(state.config) {
+      state.config.enhanceSupplement(state, supplementNode, supplement);
+    }
     doc.create(supplementNode);
     return supplementNode;
     // doc.show("figures", id);
@@ -4576,7 +4584,9 @@ LensImporter.Prototype = function() {
     }
 
     // Give the config the chance to add stuff
-    state.config.enhanceArticle(this, state, article);
+    if(state.config){
+      state.config.enhanceArticle(this, state, article);
+    }
 
   };
 
@@ -4615,8 +4625,9 @@ LensImporter.Prototype = function() {
 
     // Populate Publication Info node
     // ------------
-
-    state.config.extractPublicationInfo(this, state, article);
+    if(state.config) {
+      state.config.extractPublicationInfo(this, state, article);
+    }
 
     // Not supported yet:
     // <trans-abstract> Translated Abstract, zero or more
